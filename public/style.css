@@ -1,0 +1,40 @@
+body {
+    color: yellowgreen;
+}
+
+#loginContainer {
+    position: fixed;
+    top: 200px;
+    z-index: 1;
+}
+
+#loginContainer .form-group {
+    padding: 0
+}
+
+.you {
+    color: blue;
+}
+
+.other {
+    color: brown;
+}
+
+#chatForm {
+    position: fixed;
+    bottom: 0px;
+    opacity: 0;
+}
+
+#chatHistory {
+    opacity: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow: auto;
+    border: 1px solid rebeccapurple;
+    border-radius: 5px;
+    height: 570px;
+    position: fixed;
+    bottom: 50px;
+    padding: 20px
+}
