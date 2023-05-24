@@ -39,7 +39,6 @@ function send() {
 // get broadcat
 Clientsoket.on("broadcast", function (data) {
     const { name, mati } = data;
-
     $("#chat").append(`
     <li class="you">
     <div class="entete">
@@ -61,7 +60,7 @@ Clientsoket.on("users", function (data) {
     for (let i = 0; i < data.length; i++) {
         $("#users").append(`
         <li>
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
+        <img src="./f.jpg" style="width: 58px;height: 50px;" alt="">
         <div>
             <h2>${data[i]}</h2>
             <h3>
