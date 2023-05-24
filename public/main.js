@@ -57,12 +57,16 @@ Clientsoket.on("broadcast", function (data) {
 })
 Clientsoket.on("users", function (data) {
 
-    for (let i = 0; i < data.length; i++) {
+    let uniqueChars = data.filter((element, index) => {
+        return data.indexOf(element) === index;
+    });
+    console.log(uniqueChars);
+    for (let i = 0; i < uniqueChars.length; i++) {
         $("#users").append(`
         <li>
         <img src="./f.jpg" style="width: 58px;height: 50px;" alt="">
         <div>
-            <h2>${data[i]}</h2>
+            <h2>${uniqueChars[i]}</h2>
             <h3>
                 <span class="status orange"></span>
                 offline
