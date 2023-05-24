@@ -1,44 +1,81 @@
 const Clientsoket = io();
-//agh in var emit kardim bayd on var on konim agh onvar on kardim bayd inja emit konim
-//1 test ro bgir k on var to server emit cardim(   soketio.emit("test", { message: "hello" });)
-
+let username;
+let message;
+let users = [];
+$("#container").css("opacity", "0");
 
 $("#loginBtn").on("click", function (name) {
     event.preventDefault();
     username = $("#username").val();
     Clientsoket.emit("login", { username });
-    Clientsoket.on("himself", function (data) {
-        console.log(data.message);
-    });
+    // set to main 
+    Clientsoket.emit('users', { username });
     $("#loginContainer").css("opacity", "0");
-    $("#chatForm").css("opacity", "1");
-    $("#chatHistory").css("opacity", "1");
+    $("#container").css("opacity", "1");
 });
-$("#messagenpm").on("click", function (name) {
+function send() {
     event.preventDefault();
-    let message = $("#mass").val();
-    Clientsoket.emit('newmassage', { message, username });
+    message = $("#mass").val();
+    // set username + message in soket server.js with emit set data
+    Clientsoket.emit('new_message', { message, username });
 
-    $("#chatHistory").append(`<div style=margin-left:auto> 
-    <div class="you">YOU</div>
-    <img src="./icon.png" alt="Avatar" style="width:50px">
-    <div>${message}</div>
-    </div>`)
-});
 
+    //  html
+    $("#chat").append(`
+    <li class="me">
+    <div class="entete">
+        <h3>Time</h3>
+        <h2>You</h2>
+        <span class="status blue"></span>
+    </div>
+    <div class="triangle"></div>
+    <div class="message">
+       ${message}
+    </div>
+</li>
+    `)
+}
+
+// get broadcat
 Clientsoket.on("broadcast", function (data) {
-    console.log("5555555");
-    console.log(data.name);
-    $("#chatHistory").append(`<div> 
-    <div class="other">${data.name}</div>
-    <img src="/w3images/bandmember.jpg" alt="Avatar" style="width:100%;">
-    <div>${data.mati}</div>
-    </div>`)
+    const { name, mati } = data;
+
+    $("#chat").append(`
+    <li class="you">
+    <div class="entete">
+        <span class="status green"></span>
+        <h2>${name}</h2>
+        <h3>time</h3>
+    </div>
+    <div class="triangle"></div>
+        <div class="message">
+            ${mati}
+        </div>
+    </li>
+    `
+    )
+
+})
+Clientsoket.on("users", function (data) {
+
+    for (let i = 0; i < data.length; i++) {
+        $("#users").append(`
+        <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
+        <div>
+            <h2>${data[i]}</h2>
+            <h3>
+                <span class="status orange"></span>
+                offline
+            </h3>
+        </div>
+    </li>
+        `
+        )
+    }
+
 
 })
 
+// get from rmin in serverjs
 
-Clientsoket.on("newuser", function (data) {
-    console.log(data.namenew);
-
-})

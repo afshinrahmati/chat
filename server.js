@@ -1,3 +1,4 @@
+const { log } = require('console');
 const express = require('express');
 const app = express()
 const Server = require('http').createServer(app)
@@ -9,33 +10,28 @@ const io = soketio(Server);
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-
+var clients = [];
 //io events
 //emit===>harf*on==>daryaft
 io.on("connection", (soketio) => {
 
+    // data ro user migirim
+    soketio.on('users', (data) => {
+        // to server store and agin send to client
+        io.emit('users', clients)
+    }
+    );
 
-    //emit ha for frstadn data
-    soketio.emit("test", { message: "hello" });
-    //on grftan atalt az data
-    soketio.on('testmani', function(data) {
-        // console.log(data);
-    });
-
-    soketio.on("login", function(data) {
-        console.log(data.username + " " + 'is login with id ' + " " + soketio.id);
-        //io is all
-        io.emit("newuser", { namenew: data.username });
-        soketio.emit("himself", { message: `Hello ${data.username}` })
-
+    soketio.on("login", function (data) {
+        clients.push(data.username)
+        io.emit("user", { username: data.username });
     })
 
-    soketio.on("newmassage", function(data) {
-
+    soketio.on("new_message", function (data) {
         soketio.broadcast.emit('broadcast', { mati: data.message, name: data.username });
-
     })
 
+    // get data form main.js
     //kharj shodan fard
     soketio.on("disconnect", (data) => {
         console.log("______LEFT__________>" + soketio.id);
